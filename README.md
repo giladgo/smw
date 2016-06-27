@@ -1,0 +1,2 @@
+# smw
+Slack My Word!
