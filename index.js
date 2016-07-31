@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const slackMiddleware = require('./middleware/slack')
 const errorHandler = require('./middleware/error_handler')
 
-const PORT = 31385
+const PORT = process.env.PORT || 31385
 const app = express()
 
 const commandDispatcher = require('./command_dispatcher')
