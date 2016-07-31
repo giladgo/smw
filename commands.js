@@ -10,8 +10,8 @@ Here are the available commands:
 	the time and date it was claimed.
 	Example: \`/mark my Hillary Clinton will win the presidency\`
 \`/mark recall [name]\`
-	Recall a previous statement you made, so you can say - "Told you!".
-	example: \`/mark reacall OJ4vLr8FWk\`
+	Recall a previous statement you made, so you can say - "Told you so!".
+	example: \`/mark recall OJ4vLr8FWk\`
 \`/mark mine\`
   Show a list of your statements.
 \`/mark help\`
@@ -23,7 +23,7 @@ Enjoy!
 module.exports = {
 	my(req, res, next) {
 		Mark.make(req.teamId, req.userId, req.userName, req.cmdArgs).then((mark) => {
-			res.respondInChannel(req.userName + 'Asked me to remember that they said "' + req.cmdArgs + '".'+
+			res.respondInChannel(req.userName + ' asked me to remember that they said "' + req.cmdArgs + '".'+
 			' To remind folks of this, type `/mark recall ' + mark.get('name') +  '`')
 		}).catch(next)
 	},
@@ -42,12 +42,16 @@ module.exports = {
 
 	mine(req, res, next) {
 		Mark.byCreator(req.teamId, req.userId).then((marks) => {
-			const table = new AsciiTable()
-			table.setHeading('Name', 'Date', 'Contents')
-			marks.forEach((mark) => {
-				table.addRow(mark.get('name'), mark.displayDate(), mark.get('mark'))
-			})
-			res.respond(`\`\`\`\n${table.toString()}\n\`\`\``)
+			if (marks.length === 0) {
+				res.respond("You haven't made any statements yet!")
+			} else {
+				const table = new AsciiTable()
+				table.setHeading('Name', 'Date', 'Contents')
+				marks.forEach((mark) => {
+					table.addRow(mark.get('name'), mark.displayDate(), mark.get('mark'))
+				})
+				res.respond(`\`\`\`\n${table.toString()}\n\`\`\``)
+			}
 		}).catch(next)
 	},
 
