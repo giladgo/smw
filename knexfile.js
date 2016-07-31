@@ -1,5 +1,5 @@
 // Update with your config settings.
-
+console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', process.env.NODE_ENV)
 const defaultDBSettings = {
 	client: 'postgresql',
 	pool: {
