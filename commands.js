@@ -53,7 +53,7 @@ module.exports = {
 
 	help(req, res, next) {
 		res.respond(HELP_TEXT)
-	}
+	},
 
 	__default__(req, res, next) {
 		res.respond(HELP_TEXT)
