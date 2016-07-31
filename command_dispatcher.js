@@ -11,9 +11,11 @@ function tryDispatch(req, res, next, cmdName) {
 
 module.exports = {
 	dispatch(req, res, next) {
+		const boundTryDispatch = tryDispatch.bind(undefined, req, res, next)
 		return (
-			tryDispatch(req, res, next, req.cmdName) ||
-			tryDispatch(req, res, next, _.camelCase(req.cmdName)) ||
+			boundTryDispatch(req.cmdName) ||
+			boundTryDispatch(_.camelCase(req.cmdName)) ||
+			boundTryDispatch('__default__') ||
 			res.status(500).send("Illegal command")
 		)
 	}

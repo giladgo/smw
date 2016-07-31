@@ -1,10 +1,29 @@
 const AsciiTable = require('ascii-table')
 const Mark = require('./models/mark')
 
+const HELP_TEXT = `\
+\`/mark\` (short for "mark my words") is a slash command to help you tell your friends - "I told you so!"
+
+Here are the available commands:
+\`/mark my [statement]\`
+	Make a statement. Mark My will repeat it in the channel, remember it for you, and will record
+	the time and date it was claimed.
+	Example: \`/mark my Hillary Clinton will win the presidency\`
+\`/mark recall [name]\`
+	Recall a previous statement you made, so you can say - "Told you!".
+	example: \`/mark reacall OJ4vLr8FWk\`
+\`/mark mine\`
+  Show a list of your statements.
+\`/mark help\`
+  Show this help message.
+
+Enjoy!
+`
+
 module.exports = {
 	my(req, res, next) {
 		Mark.make(req.teamId, req.userId, req.userName, req.cmdArgs).then((mark) => {
-			res.respond('Ok! I\'ll remember that you said that.'+
+			res.respondInChannel(req.userName + 'Asked me to remember that they said "' + req.cmdArgs + '".'+
 			' To remind folks of this, type `/mark recall ' + mark.get('name') +  '`')
 		}).catch(next)
 	},
@@ -30,5 +49,13 @@ module.exports = {
 			})
 			res.respond(`\`\`\`\n${table.toString()}\n\`\`\``)
 		}).catch(next)
+	},
+
+	help(req, res, next) {
+		res.respond(HELP_TEXT)
+	}
+
+	__default__(req, res, next) {
+		res.respond(HELP_TEXT)
 	}
 }
