@@ -15,6 +15,10 @@ app.post('/mark', (req, res, next) => {
 	commandDispatcher.dispatch(req, res, next)
 })
 
+app.get('/', (req, res) => {
+	res.status(200).send('<h1>OK</h1>')
+})
+
 app.use(errorHandler)
 
 app.listen(PORT, () => { console.log(`Listening on port ${PORT}...`) } )
