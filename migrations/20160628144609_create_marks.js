@@ -3,6 +3,7 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('marks', (table) => {
 		table.increments()
 		table.string('creator_id')
+		table.string('creator_name')
 		table.string('team_id')
 		table.string('name')
 		table.string('mark')
