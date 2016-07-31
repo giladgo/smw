@@ -1,5 +1,5 @@
 // Update with your config settings.
-console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', process.env.NODE_ENV)
+
 const defaultDBSettings = {
 	client: 'postgresql',
 	pool: {
@@ -26,3 +26,6 @@ module.exports = {
   staging: Object.assign({}, defaultDBSettings, herokuDBSettings),
   production: Object.assign({}, defaultDBSettings, herokuDBSettings)
 };
+
+
+console.log(module.exports.production)
