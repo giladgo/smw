@@ -2,9 +2,6 @@
 
 const defaultDBSettings = {
 	client: 'postgresql',
-	connection: {
-		database: 'smw'
-	},
 	pool: {
 		min: 2,
 		max: 10
@@ -14,8 +11,18 @@ const defaultDBSettings = {
 	}
 }
 
+const developmentDBSettings = {
+	connection: {
+		database: 'smw'
+	}
+}
+
+const herokuDBSettings = {
+	connection: process.env.DATABASE_URL
+}
+
 module.exports = {
-  development: defaultDBSettings,
-  staging: defaultDBSettings,
-  production: defaultDBSettings
+  development: Object.assign({}, defaultDBSettings, developmentDBSettings),
+  staging: Object.assign({}, defaultDBSettings, herokuDBSettings),
+  production: Object.assign({}, defaultDBSettings, herokuDBSettings)
 };
