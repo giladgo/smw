@@ -26,6 +26,3 @@ module.exports = {
   staging: Object.assign({}, defaultDBSettings, herokuDBSettings),
   production: Object.assign({}, defaultDBSettings, herokuDBSettings)
 };
-
-
-console.log(module.exports.production)
