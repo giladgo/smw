@@ -1,4 +1,4 @@
-// Update with your config settings.
+"use strict";
 
 const defaultDBSettings = {
 	client: 'postgresql',

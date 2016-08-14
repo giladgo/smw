@@ -1,3 +1,5 @@
+"use strict";
+
 function slackParams(req, res, next) {
 	if (req.body) {
 		req.teamId = req.body.team_id

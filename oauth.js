@@ -1,3 +1,5 @@
+"use strict";
+
 const slack = require('slack-api').promisify()
 const Team = require('./models/team')
 

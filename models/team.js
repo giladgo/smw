@@ -1,3 +1,5 @@
+"use strict";
+
 const randomstring = require('randomstring')
 const moment = require('moment')
 const bookshelf = require('../db/bookshelf')
