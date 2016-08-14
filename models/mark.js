@@ -18,11 +18,12 @@ const Mark = bookshelf.Model.extend(
 		}
 	},
 	{
-		make(teamId, creatorId, creatorName, text) {
+		make(teamId, channelId, creatorId, creatorName, text) {
 	    return this.forge({
 				creator_id: creatorId,
 				creator_name: creatorName,
 				team_id: teamId,
+				channel_id: channelId,
 				name: randomstring.generate(10),
 				mark: text
 			}).save()
@@ -41,8 +42,14 @@ const Mark = bookshelf.Model.extend(
 				team_id: teamId,
 				creator_id: creatorId
 			}}).fetch()
-		}
+		},
 
+		byChannel(teamId, channelId) {
+			return this.collection().query({ where: {
+				team_id: teamId,
+				channel_id: channelId
+			}}).fetch()
+		}
 	}
 )
 

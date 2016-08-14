@@ -9,9 +9,9 @@ Here are the available commands:
 	Make a statement. Mark My will repeat it in the channel, remember it for you, and will record
 	the time and date it was claimed.
 	Example: \`/mark my Hillary Clinton will win the presidency\`
-\`/mark recall [name]\`
-	Recall a previous statement you made, so you can say - "Told you so!".
-	example: \`/mark recall OJ4vLr8FWk\`
+\`/mark predictions\`
+	List the predicitons that people made in this channel.
+	example: \`/mark predictions\` or just \`/mark p\` as a shortcut.
 \`/mark mine\`
   Show a list of your statements.
 \`/mark help\`
@@ -20,37 +20,42 @@ Here are the available commands:
 Enjoy!
 `
 
+function marksToTable(marks) {
+	const table = new AsciiTable()
+	table.setHeading('Predictor', 'Date', 'Contents')
+	marks.forEach((mark) => {
+		table.addRow(mark.get('creator_name'), mark.displayDate(), mark.get('mark'))
+	})
+	return `\`\`\`\n${table.toString()}\n\`\`\``
+}
+
 module.exports = {
 	my(req, res, next) {
-		Mark.make(req.teamId, req.userId, req.userName, req.cmdArgs).then((mark) => {
-			res.respondInChannel(req.userName + ' asked me to remember that they said "' + req.cmdArgs + '".'+
-			' To remind folks of this, type `/mark recall ' + mark.get('name') +  '`')
+		Mark.make(req.teamId, req.channelId, req.userId, req.userName, req.cmdArgs).then((mark) => {
+			res.respondInChannel(req.userName + ' asked me to remember that they said "' + req.cmdArgs + '".')
 		}).catch(next)
 	},
 
-	recall(req, res, next) {
-		Mark.byName(req.teamId, req.userId, req.cmdArgs).then((mark) => {
-			if (mark) {
-				res.respondInChannel(mark.get('creator_name') + ' said ' +
-					mark.displayDate() + ': "' + mark.get('mark') + '"')
+	predictions(req, res, next) {
+		Mark.byChannel(req.teamId, req.channelId).then((marks) => {
+			if (marks.length === 0) {
+				res.respond("Nobody has made a prediction here yet! Use `/mark my [prediction]` to make one.")
 			} else {
-				res.respond('Could not find a statement `' + req.cmdArgs +
-					'`. Use `/mark mine` to see the list of you statements.')
+				res.respond(marksToTable(marks))
 			}
 		}).catch(next)
+	},
+
+	p() {
+		return this.predictions(...arguments)
 	},
 
 	mine(req, res, next) {
 		Mark.byCreator(req.teamId, req.userId).then((marks) => {
 			if (marks.length === 0) {
-				res.respond("You haven't made any statements yet!")
+				res.respond("You haven't any predictions yet! Use `/mark my [prediction]` to make one.")
 			} else {
-				const table = new AsciiTable()
-				table.setHeading('Name', 'Date', 'Contents')
-				marks.forEach((mark) => {
-					table.addRow(mark.get('name'), mark.displayDate(), mark.get('mark'))
-				})
-				res.respond(`\`\`\`\n${table.toString()}\n\`\`\``)
+				res.respond(marksToTable(marks))
 			}
 		}).catch(next)
 	},
